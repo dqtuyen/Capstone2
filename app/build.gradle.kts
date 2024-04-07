@@ -53,4 +53,7 @@ dependencies {
     implementation("commons-codec:commons-codec:1.14")
 
     implementation("com.google.android.gms:play-services-location:21.2.0")
+
+    implementation("com.squareup.retrofit2:retrofit:2.11.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
 }

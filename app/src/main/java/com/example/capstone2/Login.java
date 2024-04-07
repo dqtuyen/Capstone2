@@ -12,13 +12,17 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.Task;
 import androidx.annotation.Nullable;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
+import java.util.List;
 
 public class Login extends AppCompatActivity {
-
     private static final int RC_SIGN_IN = 9001;
     private GoogleSignInClient mGoogleSignInClient;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,7 +37,7 @@ public class Login extends AppCompatActivity {
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         // Đăng ký sự kiện khi người dùng click vào nút đăng nhập bằng Google
-        findViewById(R.id.google_btn).setOnClickListener(view -> signIn());
+        findViewById(R.id.btn_login_google).setOnClickListener(view -> signIn());
     }
 
     private void signIn() {
@@ -50,30 +54,70 @@ public class Login extends AppCompatActivity {
             handleSignInResult(task);
         }
     }
-
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult();
-            // Lấy thông tin email từ tài khoản Google
-            String email = account.getEmail();
+            // Kiểm tra xem đăng nhập thành công hay không
+            if (account != null) {
+                String userEmail = account.getEmail(); // Lấy địa chỉ email từ tài khoản Google
+                // Thực hiện yêu cầu API để lấy danh sách địa chỉ email từ API
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl("https://c2se-14-sts-api.onrender.com/")
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
 
-            // Kiểm tra xem email có phải là dohuyhoang25062000@gmail.com không
-            if ("dohuyhoang25062000@gmail.com".equals(email)) {
-                // Đăng nhập thành công với tài khoản dohuyhoang25062000@gmail.com
-                String displayName = account.getDisplayName();
-                Toast.makeText(this, "Đăng nhập thành công với tài khoản: " + displayName, Toast.LENGTH_SHORT).show();
+                ApiService apiService = retrofit.create(ApiService.class);
+                apiService.getEmails().enqueue(new Callback<List<String>>() {
+                    @Override
+                    public void onResponse(Call<List<String>> call, Response<List<String>> response) {
+                        if (response.isSuccessful()) {
+                            List<String> emails = response.body();
+                            if (emails != null && !emails.isEmpty()) {
+                                if (emails.contains(userEmail)) {
+                                    // Địa chỉ email hợp lệ, đăng nhập thành công
+                                    Intent intent = new Intent(Login.this, MainActivity.class);
+                                    startActivity(intent);
+                                    finish(); // Kết thúc hoạt động đăng nhập để ngăn người dùng quay lại
+                                } else {
+                                    // Địa chỉ email không hợp lệ, hiển thị thông báo hoặc không cho phép đăng nhập
+                                    Toast.makeText(Login.this, "Địa chỉ email chưa được đăng ký", Toast.LENGTH_SHORT).show();
+                                    signOut(); // Đăng xuất người dùng
+                                }
+                            } else {
+                                // Không có địa chỉ email nào từ API
+                                Toast.makeText(Login.this, "Không có địa chỉ email từ API", Toast.LENGTH_SHORT).show();
+                                signOut(); // Đăng xuất người dùng
+                            }
+                        } else {
+                            // Xử lý lỗi khi gọi API
+                            Toast.makeText(Login.this, "Lỗi khi gửi yêu cầu đến server", Toast.LENGTH_SHORT).show();
+                            signOut(); // Đăng xuất người dùng
+                        }
+                    }
 
-                // Tiếp tục xử lý tài khoản người dùng ở đây...
+                    @Override
+                    public void onFailure(Call<List<String>> call, Throwable t) {
+                        // Xử lý lỗi khi gửi yêu cầu
+                        Toast.makeText(Login.this, "Lỗi khi gửi yêu cầu đến server", Toast.LENGTH_SHORT).show();
+                        signOut(); // Đăng xuất người dùng
+                    }
+                });
             } else {
-                // Đăng nhập thất bại vì tài khoản không khớp
-                Toast.makeText(this, "Bạn không được phép đăng nhập với tài khoản này", Toast.LENGTH_SHORT).show();
+                // Đăng nhập không thành công
+                Toast.makeText(this, "Đăng nhập không thành công", Toast.LENGTH_SHORT).show();
                 signOut(); // Đăng xuất người dùng
             }
         } catch (Exception e) {
-            // Đăng nhập thất bại
-            Log.w("GoogleSignIn", "signInResult:failed code=" + e.getMessage());
-            Toast.makeText(this, "Sign in failed", Toast.LENGTH_SHORT).show();
+            // Xử lý lỗi khi đăng nhập
+            Log.e("GoogleSignIn", "signInResult:failed code=" + e.getMessage());
+            Toast.makeText(this, "Đăng nhập không thành công", Toast.LENGTH_SHORT).show();
+            signOut(); // Đăng xuất người dùng
         }
+    }
+    @Override
+    protected void onStop() {
+        super.onStop();
+        signOut();
     }
 
     private void signOut() {
@@ -86,5 +130,4 @@ public class Login extends AppCompatActivity {
                     }
                 });
     }
-
 }
