@@ -76,8 +76,9 @@ public class Login extends AppCompatActivity {
                                 if (emails.contains(userEmail)) {
                                     // Địa chỉ email hợp lệ, đăng nhập thành công
                                     Intent intent = new Intent(Login.this, MainActivity.class);
+                                    Toast.makeText(Login.this, userEmail, Toast.LENGTH_SHORT).show();
+                                    intent.putExtra("user_email", userEmail); //
                                     startActivity(intent);
-                                    finish(); // Kết thúc hoạt động đăng nhập để ngăn người dùng quay lại
                                 } else {
                                     // Địa chỉ email không hợp lệ, hiển thị thông báo hoặc không cho phép đăng nhập
                                     Toast.makeText(Login.this, "Địa chỉ email chưa được đăng ký", Toast.LENGTH_SHORT).show();

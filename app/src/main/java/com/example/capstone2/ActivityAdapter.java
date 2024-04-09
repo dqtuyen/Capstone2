@@ -31,9 +31,9 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ActivityAdapter.ViewHolder holder, int position) {
         DataActivity dataActivity = dataActivities.get(position);
-        holder.txt_title.setText(dataActivity.getTitle());
-        holder.txt_date.setText(dataActivity.getTime());
-        holder.txt_money.setText((dataActivity.getMoney()));
+//        holder.txt_title.setText(dataActivity.getTitle());
+//        holder.txt_date.setText(dataActivity.getTime());
+//        holder.txt_money.setText((dataActivity.getMoney()));
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
