@@ -25,6 +25,7 @@ import com.google.zxing.integration.android.IntentResult;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import vn.zalopay.sdk.Environment;
 import vn.zalopay.sdk.ZaloPayError;
@@ -39,6 +40,8 @@ public class HomeFragment extends Fragment {
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
+    private List<Transaction> transactions = new ArrayList<>();
 
     private String mParam1;
     private String mParam2;
@@ -113,10 +116,10 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        dataActivities.add(new DataActivity("Thanh toán gửi xe bằng QR", "19:30, 03 thg 03 2024", "-2000"));
-
-        adapter = new ActivityAdapter(getContext(), dataActivities);
-        recyclerView.setAdapter(adapter);
+//        dataActivities.add(new DataActivity("Thanh toán", "19:30, 03 thg 03 2024", "-","2000"));
+//
+//        adapter = new ActivityAdapter(getContext(), dataActivities);
+//        recyclerView.setAdapter(adapter);
 
         StrictMode.ThreadPolicy policy = new
                 StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -144,19 +147,56 @@ public class HomeFragment extends Fragment {
                 if (response.isSuccessful()) {
                     User user = response.body();
                     if (user != null) {
+                        int userId = user.getUser_id();
+                        Log.d(TAG, "User ID: " + userId);
+                        // Gọi API để lấy lịch sử giao dịch dựa trên user ID
+                        ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
+                        Call<List<Transaction>> transactionCall = apiService.getTransactionHistory(userId);
+                        transactionCall.enqueue(new Callback<List<Transaction>>() {
+                            @Override
+                            public void onResponse(Call<List<Transaction>> call, Response<List<Transaction>> response) {
+                                if (response.isSuccessful()) {
+                                    List<Transaction> transactions = response.body();
+                                    if (transactions != null && !transactions.isEmpty()) {
+                                        // Xóa dữ liệu cũ trong dataActivities
+                                        dataActivities.clear();
+
+                                        // Duyệt qua từng giao dịch và thêm vào dataActivities
+                                        for (Transaction transaction : transactions) {
+                                            String title = transaction.getTransactionTypeString();
+                                            String time = transaction.getFormattedTranTime();
+                                            String sign = transaction.getSign();
+                                            String money = String.valueOf(transaction.getAmount());
+
+                                            dataActivities.add(new DataActivity(title, time, sign, money));
+                                        }
+
+                                        // Tạo adapter mới với dữ liệu mới và thiết lập cho RecyclerView
+                                        adapter = new ActivityAdapter(getContext(), dataActivities);
+                                        recyclerView.setAdapter(adapter);
+                                    } else {
+                                        Log.d(TAG, "No transaction history found for user ID: " + userId);
+                                    }
+                                } else {
+                                    Log.e(TAG, "Failed to get transaction history");
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<List<Transaction>> call, Throwable t) {
+                                Log.e(TAG, "API call failed", t);
+                            }
+                        });
+
                         // Gán fullname vào txt_name
                         txt_name.setText(user.getFull_name());
                         // Log fullName lên console
                         Log.d(TAG, "FullName: " + user.getFull_name());
-                        // Hiển thị Toast thông báo lấy thông tin thành công
-                        Toast.makeText(getContext(), "Đã lấy thông tin người dùng thành công" + user.getFull_name(), Toast.LENGTH_SHORT).show();
                     } else {
                         Log.e(TAG, "User object is null");
                     }
                 } else {
                     Log.e(TAG, "API call failed");
-                    // Hiển thị Toast thông báo lỗi khi gọi API
-                    Toast.makeText(getContext(), "Lỗi khi gọi API", Toast.LENGTH_SHORT).show();
                 }
             }
 
