@@ -42,6 +42,7 @@ dependencies {
     implementation("androidx.camera:camera-view:1.3.2")
 
     implementation(files("libs/zpdk-release-v3.1.aar"))
+    implementation("com.google.android.gms:play-services-auth:21.0.0")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
@@ -50,4 +51,9 @@ dependencies {
 
     implementation("com.squareup.okhttp3:okhttp:4.6.0")
     implementation("commons-codec:commons-codec:1.14")
+
+    implementation("com.google.android.gms:play-services-location:21.2.0")
+
+    implementation("com.squareup.retrofit2:retrofit:2.11.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
 }

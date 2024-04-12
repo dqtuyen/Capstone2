@@ -14,6 +14,18 @@ import java.util.ArrayList;
 
 public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHolder>{
 
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        TextView txt_money, txt_title, txt_date, txt_sign;
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            txt_money = itemView.findViewById(R.id.txt_money);
+            txt_title = itemView.findViewById(R.id.txt_title);
+            txt_date = itemView.findViewById(R.id.txt_date);
+            txt_sign = itemView.findViewById(R.id.txt_sign);
+
+        }
+    }
+
     ArrayList<DataActivity> dataActivities;
     Context context;
 
@@ -34,16 +46,7 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
         holder.txt_title.setText(dataActivity.getTitle());
         holder.txt_date.setText(dataActivity.getTime());
         holder.txt_money.setText((dataActivity.getMoney()));
-    }
-
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView txt_money, txt_title, txt_date;
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-            txt_money = itemView.findViewById(R.id.txt_money);
-            txt_title = itemView.findViewById(R.id.txt_title);
-            txt_date = itemView.findViewById(R.id.txt_date);
-        }
+        holder.txt_sign.setText((dataActivity).getSign());
     }
     @Override
     public int getItemCount() {
