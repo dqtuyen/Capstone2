@@ -25,6 +25,7 @@ import com.google.zxing.integration.android.IntentResult;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import vn.zalopay.sdk.Environment;
@@ -46,6 +47,8 @@ public class HomeFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private static final String TAG = "HomeFragment";
+
+    private  int userId;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -77,7 +80,7 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    TextView txt_name;
+    TextView txt_name, txt_wallet;
     TextView textView;
 
     ImageView img_btn_scan, img_btn_naptien;
@@ -95,6 +98,7 @@ public class HomeFragment extends Fragment {
         img_btn_scan = view.findViewById(R.id.img_btn_scan);
         recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        txt_wallet = view.findViewById(R.id.txt_wallet);
 
         // Lấy userEmail từ getArguments()
         Bundle bundle = getArguments();
@@ -147,7 +151,11 @@ public class HomeFragment extends Fragment {
                 if (response.isSuccessful()) {
                     User user = response.body();
                     if (user != null) {
-                        int userId = user.getUser_id();
+                        txt_name.setText(user.getFull_name());
+
+                        // Gán giá trị của wallet vào TextView txt_wallet
+                        txt_wallet.setText(String.valueOf(user.getWallet()));
+                        userId = user.getUser_id();
                         Log.d(TAG, "User ID: " + userId);
                         // Gọi API để lấy lịch sử giao dịch dựa trên user ID
                         ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
@@ -213,12 +221,36 @@ public class HomeFragment extends Fragment {
         try {
             JSONObject data = orderApi.createOrder("100000000");
             String code = data.getString("returncode");
+            int transaction_type = 1;
+            double amount = data.getDouble("amount");
+            Date tran_time = new Date();
 
             if (code.equals("1")) {
                 String token = data.getString("zptranstoken");
+                // Tạo đối tượng TransactionRequestBody từ dữ liệu nhận được
+                TransactionRequestBody requestBody = new TransactionRequestBody(userId, transaction_type, amount, tran_time);
                 ZaloPaySDK.getInstance().payOrder(getActivity(), token, "demozpdk://app", new PayOrderListener() {
                     @Override
-                    public void onPaymentSucceeded(String s, String s1, String s2) {}
+                    public void onPaymentSucceeded(String s, String s1, String s2) {
+                        // Gọi API để thêm giao dịch
+                        ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
+                        Call<Transaction> call = apiService.addTransaction(requestBody);
+                        call.enqueue(new Callback<Transaction>() {
+                            @Override
+                            public void onResponse(Call<Transaction> call, Response<Transaction> response) {
+                                if (response.isSuccessful()) {
+                                    Toast.makeText(getActivity(), "Giao dịch thành công", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(getActivity(), "Giao dịch không thành công", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<Transaction> call, Throwable t) {
+                                Log.e(TAG, "Lỗi API thêm giao dịch");
+                            }
+                        });
+                    }
 
                     @Override
                     public void onPaymentCanceled(String s, String s1) {}
@@ -231,6 +263,7 @@ public class HomeFragment extends Fragment {
             e.printStackTrace();
         }
     }
+
 
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
