@@ -1,6 +1,7 @@
 package com.example.capstone2;
 
 import android.content.Intent;
+import android.nfc.Tag;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -77,7 +78,7 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    TextView txt_name;
+    TextView txt_name, txt_money;
     TextView textView;
 
     ImageView img_btn_scan, img_btn_naptien;
@@ -91,6 +92,7 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         textView = view.findViewById(R.id.text);
         txt_name = view.findViewById(R.id.txt_name);
+        txt_money = view.findViewById(R.id.txt_money);
         img_btn_naptien = view.findViewById(R.id.img_btn_naptien);
         img_btn_scan = view.findViewById(R.id.img_btn_scan);
         recyclerView = view.findViewById(R.id.recyclerView);
@@ -211,14 +213,16 @@ public class HomeFragment extends Fragment {
         CreateOrder orderApi = new CreateOrder();
 
         try {
-            JSONObject data = orderApi.createOrder("100000000");
+            JSONObject data = orderApi.createOrder("10000");
             String code = data.getString("returncode");
 
             if (code.equals("1")) {
                 String token = data.getString("zptranstoken");
                 ZaloPaySDK.getInstance().payOrder(getActivity(), token, "demozpdk://app", new PayOrderListener() {
                     @Override
-                    public void onPaymentSucceeded(String s, String s1, String s2) {}
+                    public void onPaymentSucceeded(String s, String s1, String s2) {
+                        
+                    }
 
                     @Override
                     public void onPaymentCanceled(String s, String s1) {}
