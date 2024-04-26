@@ -1,14 +1,24 @@
 package com.example.capstone2;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,15 +40,14 @@ public class AccountFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment AccountFragment.
-     */
     // TODO: Rename and change types and number of parameters
+    public static AccountFragment newInstance(String userEmail) {
+        AccountFragment fragment = new AccountFragment();
+        Bundle args = new Bundle();
+        args.putString("user_email", userEmail);
+        fragment.setArguments(args);
+        return fragment;
+    }
     public static AccountFragment newInstance(String param1, String param2) {
         AccountFragment fragment = new AccountFragment();
         Bundle args = new Bundle();
@@ -58,14 +67,26 @@ public class AccountFragment extends Fragment {
     }
 
     Button btn_information;
-
+    TextView txt_name, txt_name2, txt_phone, txt_email, txt_address;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_account, container, false);
         btn_information = view.findViewById(R.id.btn_information);
+        txt_name = view.findViewById(R.id.txt_name);
+        txt_name2 = view.findViewById(R.id.txt_name2);
+        txt_phone = view.findViewById(R.id.txt_phone);
+        txt_email = view.findViewById(R.id.txt_email);
+        txt_address = view.findViewById(R.id.txt_address);
 
+        // Lấy userEmail từ getArguments()
+        Bundle bundle = getArguments();
+        if (bundle != null && bundle.containsKey("user_email")) {
+            String userEmail = bundle.getString("user_email");
+            // Gọi phương thức getUserByEmail() để lấy thông tin người dùng dựa trên email
+            getUserByEmail(userEmail);
+        }
 
         setEvent();
         return view;
@@ -77,6 +98,37 @@ public class AccountFragment extends Fragment {
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), EditInformatinon.class);
                 startActivity(intent);
+            }
+        });
+    }
+
+    private void getUserByEmail(String email) {
+        // Gọi phương thức getUserByEmail(email) từ ApiService
+        ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
+        Call<User> call = apiService.getUserByEmail(email);
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful()) {
+                    User user = response.body();
+                    if (user != null) {
+                        txt_name.setText(user.getFull_name());
+                        txt_name2.setText(user.getFull_name());
+                        txt_email.setText(user.getEmail());
+                        txt_phone.setText(user.getPhone_number());
+                        txt_address.setText(user.getAddress());
+                        // Log fullName lên console
+                        Log.d(TAG, "FullName: " + user.getFull_name());
+                    } else {
+                        Log.e(TAG, "User object is null");
+                    }
+                } else {
+                    Log.e(TAG, "API call failed");
+                }
+            }
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Log.e(TAG, "API call failed", t);
             }
         });
     }

@@ -10,7 +10,7 @@ public class QrGenerator {
 
     public static Bitmap generateQrCode(QrData qrData) throws WriterException {
         QRCodeWriter writer = new QRCodeWriter();
-        BitMatrix bitMatrix = writer.encode(qrData.getText(), BarcodeFormat.QR_CODE, 500, 500);
+        BitMatrix bitMatrix = writer.encode(qrData.getText(), BarcodeFormat.QR_CODE, 600, 600);
         int width = bitMatrix.getWidth();
         int height = bitMatrix.getHeight();
         Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);

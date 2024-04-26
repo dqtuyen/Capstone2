@@ -111,7 +111,7 @@ public class Login extends AppCompatActivity {
         } catch (Exception e) {
             // Xử lý lỗi khi đăng nhập
             Log.e("GoogleSignIn", "signInResult:failed code=" + e.getMessage());
-            Toast.makeText(this, "Đăng nhập không thành công", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Đăng nhập không thành công !", Toast.LENGTH_SHORT).show();
             signOut(); // Đăng xuất người dùng
         }
     }
