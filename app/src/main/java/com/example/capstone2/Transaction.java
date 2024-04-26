@@ -9,11 +9,11 @@ public class Transaction {
     private int transaction_id;
     private int user_id;
     private int transaction_type;
-    private Date check_time;
+    private int check_time;
     private double amount;
     private Date tran_time;
 
-    public Transaction(String full_name, double wallet, int transaction_id, int user_id, int transaction_type, Date check_time, double amount, Date tran_time) {
+    public Transaction(String full_name, double wallet, int transaction_id, int user_id, int transaction_type, int check_time, double amount, Date tran_time) {
         this.full_name = full_name;
         this.wallet = wallet;
         this.transaction_id = transaction_id;
@@ -64,11 +64,11 @@ public class Transaction {
         this.transaction_type = transaction_type;
     }
 
-    public Date getCheck_time() {
+    public int getCheck_time() {
         return check_time;
     }
 
-    public void setCheck_time(Date check_time) {
+    public void setCheck_time(int check_time) {
         this.check_time = check_time;
     }
 
