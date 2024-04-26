@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".QRFragment">
+
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_small"
+        android:paddingVertical="@dimen/margin_mini"
+        android:layout_marginHorizontal="@dimen/margin_mid"
+        android:background="@drawable/custom_rounded_button_text"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/textView10">
+
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:scaleType="centerCrop"
+            android:layout_marginLeft="@dimen/margin_small"
+            android:layout_marginRight="@dimen/margin_mini"
+            android:padding="@dimen/margin_mini"
+            android:src="@drawable/logo_dtu" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txt_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_mini"
+                android:text="Dương Quang Tuyến"
+                android:textSize="@dimen/text_size_h3"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/txt_dob"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="01/01/2002"
+                android:textSize="@dimen/text_size_h3"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Duy Tan University"
+                android:textColor="@color/gray"
+                android:textSize="@dimen/text_size_h4"
+                android:layout_marginBottom="@dimen/margin_mini"
+                 />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin_mid"
+        android:layout_marginTop="@dimen/margin_mid"
+        android:text="Mã QR của tôi"
+        android:textSize="@dimen/text_size_h2"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/img_btn_naptien"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_mid"
+        android:layout_marginTop="@dimen/margin_mid"
+        android:src="@drawable/ic_scan_qr"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+
+    <TextView
+        android:id="@+id/txt_countdown"
+        android:layout_marginTop="@dimen/margin_mini"
+        android:textColor="@color/gray"
+        android:textStyle="italic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Đưa mã QR đến máy quét"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/img_btn_naptien" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:gravity="center"
+        android:layout_marginBottom="@dimen/margin_mid"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:id="@+id/imageView7"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_security" />
+
+        <TextView
+            android:id="@+id/textView14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_mini"
+            android:textColor="@color/gray"
+            android:text="Hãy bảo mật mã QR của bạn" />
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

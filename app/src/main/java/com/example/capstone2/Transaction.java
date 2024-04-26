@@ -32,8 +32,8 @@ public class Transaction {
         this.full_name = full_name;
     }
 
-    public double getWallet() {
-        return wallet;
+    public long getWallet() {
+        return (long) wallet;
     }
 
     public void setWallet(double wallet) {
@@ -72,8 +72,8 @@ public class Transaction {
         this.check_time = check_time;
     }
 
-    public double getAmount() {
-        return amount;
+    public long getAmount() {
+        return (long) amount;
     }
 
     public void setAmount(double amount) {

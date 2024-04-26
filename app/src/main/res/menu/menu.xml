@@ -2,8 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/menu_tab_1" android:title="Trang chủ" app:iconGravity="textTop" android:icon="@drawable/ic_home_2"/>
-    <item android:id="@+id/menu_tab_2" android:title="Mã QR của tôi" app:iconGravity="textTop" android:icon="@drawable/ic_scan_qr"/>
-    <item android:id="@+id/menu_tab_3" android:title="Nạp/Rút" app:iconGravity="textTop" android:icon="@drawable/ic_wellet"/>
-    <item android:id="@+id/menu_tab_4" android:title="Cá nhân"  app:iconGravity="textTop" android:icon="@drawable/ic_canhan_1"/>
+    <item android:id="@+id/menu_tab_2" android:title="Mã QR của tôi" app:iconGravity="textTop" android:icon="@drawable/ic_qr"/>
+    <item android:id="@+id/menu_tab_3" android:title="Cá nhân"  app:iconGravity="textTop" android:icon="@drawable/ic_account"/>
 
 </menu>
