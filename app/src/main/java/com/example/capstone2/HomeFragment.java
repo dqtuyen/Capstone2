@@ -138,6 +138,13 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        img_btn_naptien.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                requestZalo();
+            }
+        });
+
         return view;
     }
 
