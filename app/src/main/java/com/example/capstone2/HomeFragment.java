@@ -1,7 +1,6 @@
 package com.example.capstone2;
 
 import android.content.Intent;
-import android.nfc.Tag;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -10,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.StrictMode;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +25,9 @@ import com.google.zxing.integration.android.IntentResult;
 
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import vn.zalopay.sdk.Environment;
@@ -47,6 +49,8 @@ public class HomeFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private static final String TAG = "HomeFragment";
+
+    private  int userId;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -78,10 +82,14 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    TextView txt_name, txt_money;
-    TextView textView;
 
-    ImageView img_btn_scan, img_btn_naptien;
+    TextView txt_name, txt_money;
+
+    TextView txt_wallet;
+
+    TextView textView, txt_naptien;
+
+    ImageView img_btn_scan, img_eye;
     RecyclerView recyclerView;
     ArrayList<DataActivity> dataActivities = new ArrayList<>();
     ActivityAdapter adapter;
@@ -92,11 +100,12 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         textView = view.findViewById(R.id.text);
         txt_name = view.findViewById(R.id.txt_name);
-        txt_money = view.findViewById(R.id.txt_money);
-        img_btn_naptien = view.findViewById(R.id.img_btn_naptien);
         img_btn_scan = view.findViewById(R.id.img_btn_scan);
         recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        txt_wallet = view.findViewById(R.id.txt_wallet);
+        img_eye = view.findViewById(R.id.img_eye);
+        txt_naptien = view.findViewById(R.id.txt_naptien);
 
         // Lấy userEmail từ getArguments()
         Bundle bundle = getArguments();
@@ -129,23 +138,35 @@ public class HomeFragment extends Fragment {
 
         ZaloPaySDK.init(553, Environment.SANDBOX);
 
-        img_btn_naptien.setOnClickListener(new View.OnClickListener() {
+
+        txt_naptien.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                requestZalo();
+                Intent intent = new Intent(getActivity(), TopUpMyWallet.class);
+                startActivity(intent);
             }
         });
-
-        img_btn_naptien.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                requestZalo();
-            }
-        });
-
+        setEvent();
         return view;
     }
+    Boolean check = true;
+    void setEvent() {
+        img_eye.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(check == true) {
+                    img_eye.setImageResource(R.drawable.ic_eye_hide);
+                    txt_wallet.setTransformationMethod(new PasswordTransformationMethod());
+                    check = false;
+                } else {
+                    img_eye.setImageResource(R.drawable.ic_eye);
+                    txt_wallet.setTransformationMethod(null);
+                    check = true;
+                }
 
+            }
+        });
+    }
     private void getUserByEmail(String email) {
         // Gọi phương thức getUserByEmail(email) từ ApiService
         ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
@@ -156,7 +177,14 @@ public class HomeFragment extends Fragment {
                 if (response.isSuccessful()) {
                     User user = response.body();
                     if (user != null) {
-                        int userId = user.getUser_id();
+                        txt_name.setText(user.getFull_name());
+                        // Gán giá trị của wallet vào TextView txt_wallet
+                        String wallet = String.valueOf(user.getWallet());
+                        Log.d("wallet", wallet);
+                        txt_wallet.setText(wallet);
+                        Log.d("wallet", formatCurrency(wallet));
+
+                        userId = user.getUser_id();
                         Log.d(TAG, "User ID: " + userId);
                         // Gọi API để lấy lịch sử giao dịch dựa trên user ID
                         ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
@@ -216,32 +244,7 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    private void requestZalo() {
-        CreateOrder orderApi = new CreateOrder();
 
-        try {
-            JSONObject data = orderApi.createOrder("10000");
-            String code = data.getString("returncode");
-
-            if (code.equals("1")) {
-                String token = data.getString("zptranstoken");
-                ZaloPaySDK.getInstance().payOrder(getActivity(), token, "demozpdk://app", new PayOrderListener() {
-                    @Override
-                    public void onPaymentSucceeded(String s, String s1, String s2) {
-                        
-                    }
-
-                    @Override
-                    public void onPaymentCanceled(String s, String s1) {}
-
-                    @Override
-                    public void onPaymentError(ZaloPayError zaloPayError, String s, String s1) {}
-                });
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -253,4 +256,19 @@ public class HomeFragment extends Fragment {
             }
         }
     }
+    public static String formatCurrency(String numberString) {
+        try {
+            // Chuyển đổi chuỗi thành số nguyên
+            int number = Integer.parseInt(numberString);
+
+            // Sử dụng DecimalFormat để định dạng số và thêm ký tự tiền tệ
+            DecimalFormat decimalFormat = new DecimalFormat("#,###đ");
+            return decimalFormat.format(number);
+        } catch (NumberFormatException e) {
+            // Xử lý nếu chuỗi không phải là số
+            e.printStackTrace();
+            return ""; // hoặc return numberString; nếu bạn muốn trả về chuỗi không thay đổi
+        }
+    }
+
 }
