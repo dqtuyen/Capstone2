@@ -111,8 +111,8 @@ public class User {
     }
 
     // Getter và Setter cho wallet
-    public double getWallet() {
-        return wallet;
+    public long getWallet() {
+        return (long)wallet;
     }
 
     public void setWallet(double wallet) {

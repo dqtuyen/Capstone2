@@ -154,7 +154,7 @@ public class HomeFragment extends Fragment {
         img_eye.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(check == true) {
+                if(check) {
                     img_eye.setImageResource(R.drawable.ic_eye_hide);
                     txt_wallet.setTransformationMethod(new PasswordTransformationMethod());
                     check = false;
@@ -167,11 +167,13 @@ public class HomeFragment extends Fragment {
             }
         });
     }
+
     private void getUserByEmail(String email) {
         // Gọi phương thức getUserByEmail(email) từ ApiService
         ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
         Call<User> call = apiService.getUserByEmail(email);
         call.enqueue(new Callback<User>() {
+
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful()) {
@@ -179,10 +181,8 @@ public class HomeFragment extends Fragment {
                     if (user != null) {
                         txt_name.setText(user.getFull_name());
                         // Gán giá trị của wallet vào TextView txt_wallet
-                        String wallet = String.valueOf(user.getWallet());
-                        Log.d("wallet", wallet);
+                        String wallet = formatCurrency(String.valueOf(user.getWallet()));
                         txt_wallet.setText(wallet);
-                        Log.d("wallet", formatCurrency(wallet));
 
                         userId = user.getUser_id();
                         Log.d(TAG, "User ID: " + userId);
@@ -204,8 +204,11 @@ public class HomeFragment extends Fragment {
                                             String time = transaction.getFormattedTranTime();
                                             String sign = transaction.getSign();
                                             String money = String.valueOf(transaction.getAmount());
+                                            String location = transaction.getLocation();
+                                            String checkin = transaction.getFormattedCheckinTime();
+                                            String checkout = transaction.getFormattedCheckoutTime();
 
-                                            dataActivities.add(new DataActivity(title, time, sign, money));
+                                            dataActivities.add(new DataActivity(title, time, sign, money, location, checkin, checkout));
                                         }
 
                                         // Tạo adapter mới với dữ liệu mới và thiết lập cho RecyclerView
@@ -218,7 +221,6 @@ public class HomeFragment extends Fragment {
                                     Log.e(TAG, "Failed to get transaction history");
                                 }
                             }
-
                             @Override
                             public void onFailure(Call<List<Transaction>> call, Throwable t) {
                                 Log.e(TAG, "API call failed", t);

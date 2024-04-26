@@ -3,17 +3,23 @@ package com.example.capstone2;
 public class DataActivity {
     private String title;
     private String time;
-
     private  String sign;
     private String money;
+    private  String location;
+    private  String checkin;
 
-    public DataActivity(String title, String time, String sign, String money) {
+
+    private  String checkout;
+
+
+    public DataActivity(String title, String time, String sign, String money, String location, String checkin, String checkout) {
         this.title = title;
         this.time = time;
         this.sign = sign;
         this.money = money;
-
-
+        this.location = location;
+        this.checkin = checkin;
+        this.checkout = checkout;
     }
 
     public String getTitle() {
@@ -47,4 +53,27 @@ public class DataActivity {
     public void setMoney(String money) {
         this.money = money;
     }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+    public String getCheckin() {
+        return checkin;
+    }
+
+    public void setCheckin(String checkin) {
+        this.checkin = checkin;
+    }
+    public String getCheckout() {
+        return checkout;
+    }
+
+    public void setCheckout(String checkout) {
+        this.checkout = checkout;
+    }
+
 }

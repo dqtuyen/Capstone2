@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHolder>{
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView txt_money, txt_title, txt_date;
+        TextView txt_money, txt_title, txt_date, txt_location, txt_checkin, txt_checkout;
         ImageView img_view;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -25,6 +25,9 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
             txt_title = itemView.findViewById(R.id.txt_title);
             txt_date = itemView.findViewById(R.id.txt_date);
             img_view = itemView.findViewById(R.id.img_view);
+            txt_location = itemView.findViewById(R.id.txt_location);
+            txt_checkin = itemView.findViewById(R.id.txt_checkin);
+            txt_checkout = itemView.findViewById(R.id.txt_checkout);
         }
     }
 
@@ -52,8 +55,15 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
         if(dataActivity.getSign().toString().contains("+")) {
             holder.txt_money.setTextColor(Color.parseColor("#00A81B"));
             holder.img_view.setImageResource(R.drawable.ic_money);
+            holder.txt_location.setText("");
+            holder.txt_checkin.setText("");
+            holder.txt_checkout.setText("");
         }
-
+        if(dataActivity.getSign().toString().contains("-")) {
+            holder.txt_location.setText(dataActivity.getLocation());
+            holder.txt_checkin.setText(dataActivity.getCheckin());
+            holder.txt_checkout.setText(dataActivity.getCheckout());
+        }
     }
     @Override
     public int getItemCount() {
