@@ -226,7 +226,6 @@ public class QRFragment extends Fragment {
 
 
 
-
                 //////////////////////////////ĐẨY LÊN DATABASE//////////////////
                 // Lấy tham chiếu tới SharedPreferences từ Context của hoạt động mẹ (activity)
                 SharedPreferences sharedPreferences = getActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
