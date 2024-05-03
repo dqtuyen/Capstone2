@@ -7,10 +7,9 @@
     android:orientation="vertical">
 
 
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -86,58 +85,57 @@
                     android:id="@+id/textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="@dimen/text_size_h2"
                     android:layout_marginHorizontal="@dimen/margin_mid"
                     android:layout_marginTop="@dimen/margin_mid"
                     android:layout_weight="1"
-                    android:text="Số dư hiện tại" />
+                    android:text="Số dư hiện tại"
+                    android:textSize="@dimen/text_size_h2" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_mini"
-                android:orientation="horizontal"
-                >
+                android:orientation="horizontal">
 
                 <ImageView
                     android:id="@+id/img_eye"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:src="@drawable/ic_eye"
-                    app:tint="#404040"
                     android:layout_gravity="center"
                     android:layout_marginVertical="@dimen/margin_small"
+                    android:layout_marginLeft="@dimen/margin_mid"
                     android:layout_marginRight="@dimen/margin_small"
-                    android:layout_marginLeft="@dimen/margin_mid" />
+                    android:src="@drawable/ic_eye"
+                    app:tint="#404040" />
 
                 <TextView
                     android:id="@+id/txt_wallet"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/text_size_h1"
                     android:layout_gravity="center"
-                    android:text="100.666đ" />
+                    android:text="100.666đ"
+                    android:textSize="@dimen/text_size_h1"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/txt_naptien"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_weight="1"
                     android:gravity="center|right"
+                    android:text="Nạp tiền"
                     android:textColor="@color/gray"
-                    android:textSize="@dimen/text_size_h3"
-                    android:layout_gravity="center"
-                    android:text="Nạp tiền" />
+                    android:textSize="@dimen/text_size_h3" />
 
                 <ImageView
                     android:id="@+id/imageView5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_margin="@dimen/margin_small"
                     android:gravity="center|right"
-                    android:layout_gravity="center"
 
                     android:src="@drawable/ic_next" />
             </LinearLayout>
@@ -150,16 +148,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/scanner"
-            android:text="Hoạt động của bạn"
-            android:textStyle="bold"
-            android:layout_marginBottom="@dimen/margin_mini"
             android:layout_marginHorizontal="@dimen/margin_mid"
-            android:textSize="25dp" />
+            android:layout_marginBottom="@dimen/margin_mini"
+            android:text="Hoạt động của bạn"
+            android:textSize="25dp"
+            android:textStyle="bold" />
 
         <ScrollView
             android:id="@+id/scrollView2"
             android:layout_width="match_parent"
-            android:layout_height="600dp">
+            android:layout_height="wrap_content">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
