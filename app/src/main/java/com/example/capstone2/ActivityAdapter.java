@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
+
+
 public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHolder>{
 
     public class ViewHolder extends RecyclerView.ViewHolder {

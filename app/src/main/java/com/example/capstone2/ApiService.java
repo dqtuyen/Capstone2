@@ -14,7 +14,7 @@ public interface ApiService {
     Call<User> getUserByEmail(@Path("email") String email);
     @GET("api/transaction-history/{userId}")
     Call<List<Transaction>> getTransactionHistory(@Path("userId") int userId);
-    @POST("api/transactions")
-    Call<Transaction> addTransaction(@Body TransactionRequestBody requestBody);
+    @POST("api/deposit")
+    Call<Transaction> deposit(@Body DepositRequestBody requestBody);
 }
 

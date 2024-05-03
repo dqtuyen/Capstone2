@@ -171,6 +171,7 @@ public class Transaction {
         }
     }
 
+
     public String getFormattedTranTime() {
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm, dd-MM-yyyy");
         return sdf.format(tran_time);

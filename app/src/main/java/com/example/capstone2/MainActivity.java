@@ -23,11 +23,16 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private BottomNavigationView mBottomNavigationView;
 
+    public static final String ACTION_RELOAD_HOME_FRAGMENT = "com.example.capstone2.RELOAD_HOME_FRAGMENT";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        if (getIntent().getAction() != null && getIntent().getAction().equals(ACTION_RELOAD_HOME_FRAGMENT)) {
+            reloadHomeFragment();
+        }
 
         // Lấy userEmail từ Intent
         Intent intent = getIntent();
@@ -102,4 +107,11 @@ public class MainActivity extends AppCompatActivity {
         super.onNewIntent(intent);
         ZaloPaySDK.getInstance().onResult(intent);
     }
+    private void reloadHomeFragment() {
+        // Replace HomeFragment với chính nó để làm mới lại nó
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.recyclerView, new HomeFragment())
+                .commit();
+    }
+
 }

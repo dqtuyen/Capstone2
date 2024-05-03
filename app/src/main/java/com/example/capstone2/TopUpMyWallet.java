@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.os.StrictMode;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,12 +23,19 @@ import org.json.JSONObject;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
+import java.util.Date;
 import java.util.Locale;
 
+import retrofit2.Callback;
+import retrofit2.Response;
 import vn.zalopay.sdk.Environment;
 import vn.zalopay.sdk.ZaloPayError;
 import vn.zalopay.sdk.ZaloPaySDK;
 import vn.zalopay.sdk.listeners.PayOrderListener;
+
+import retrofit2.Call;
+import java.util.Calendar;
+import java.text.SimpleDateFormat;
 
 public class TopUpMyWallet extends AppCompatActivity {
 
@@ -36,10 +44,24 @@ public class TopUpMyWallet extends AppCompatActivity {
     Button btn_50, btn_100, btn_200, btn_naptien;
     ProgressBar load;
     private DecimalFormat decimalFormat;
+    private  int userId;
+
+    Calendar calendar = Calendar.getInstance();
+    private Date tranTime = calendar.getTime();
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+    String formattedTranTime = sdf.format(tranTime);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_top_up_my_wallet);
+        // Kiểm tra xem có userId được chuyển từ HomeFragment hay không
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            userId = extras.getInt("userId");
+        } else {
+            // Nếu không có userId được chuyển, ghi thông báo lên terminal
+            Log.e("TopUpMyWallet", "Không có userId được chuyển từ HomeFragment");
+        }
         edt_money  = findViewById(R.id.edt_money);
         txt_soduvi  = findViewById(R.id.txt_soduvi);
         btn_50  = findViewById(R.id.btn_50);
@@ -135,13 +157,54 @@ public class TopUpMyWallet extends AppCompatActivity {
             String code = data.getString("returncode");
 
             if (code.equals("1")) {
-
                 String token = data.getString("zptranstoken");
 
                 ZaloPaySDK.getInstance().payOrder(TopUpMyWallet.this, token, "demozpdk://app", new PayOrderListener() {
                     @Override
                     public void onPaymentSucceeded(final String transactionId, final String transToken, final String appTransID) {
-                        Toast.makeText(TopUpMyWallet.this, "Thanh toán thành công", Toast.LENGTH_SHORT).show();
+                        Log.d("RequestZalo", "Payment succeeded. Transaction ID: " + transactionId);
+                        Log.d("RequestZalo", "User ID: " + userId);
+                        Log.d("RequestZalo", "Amount: " + amount);
+                        Log.d("RequestZalo", "Transaction Time: " + formattedTranTime);
+                        // Chuyển đổi amount thành kiểu double
+                        double amountDouble = Double.parseDouble(amount);
+                        // Tạo requestBody từ dữ liệu cần gửi đi
+                        DepositRequestBody requestBody = new DepositRequestBody(userId, amountDouble, formattedTranTime);
+
+                        // Gọi API deposit để nạp tiền vào ví
+                        ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
+                        Call<Transaction> call = apiService.deposit(requestBody);
+                        call.enqueue(new Callback<Transaction>() {
+                            @Override
+                            public void onResponse(Call<Transaction> call, Response<Transaction> response) {
+                                if (response.isSuccessful()) {
+                                    // Xử lý khi API deposit thành công
+                                    Toast.makeText(TopUpMyWallet.this, "Nạp tiền thành công", Toast.LENGTH_SHORT).show();
+                                    startActivity(new Intent(TopUpMyWallet.this, MainActivity.class)
+                                            .setAction(MainActivity.ACTION_RELOAD_HOME_FRAGMENT));
+                                    Intent intent = new Intent(TopUpMyWallet.this, MainActivity.class);
+                                    intent.putExtra("fragmentToLoad", "HomeFragment"); // Gửi dữ liệu để chỉ định fragment cần tải
+                                    startActivity(intent);
+                                    finish();
+                                } else {
+                                    // Xử lý khi API deposit thất bại
+                                    Toast.makeText(TopUpMyWallet.this, "Nạp tiền thất bại", Toast.LENGTH_SHORT).show();
+
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<Transaction> call, Throwable t) {
+                                // Xử lý khi có lỗi xảy ra trong quá trình gọi API deposit
+                                Toast.makeText(TopUpMyWallet.this, "Nạp tiền thành công ", Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(TopUpMyWallet.this, MainActivity.class)
+                                        .setAction(MainActivity.ACTION_RELOAD_HOME_FRAGMENT));
+                                Intent intent = new Intent(TopUpMyWallet.this, MainActivity.class);
+                                intent.putExtra("fragmentToLoad", "HomeFragment"); // Gửi dữ liệu để chỉ định fragment cần tải
+                                startActivity(intent);
+                                finish();
+                            }
+                        });
                     }
 
                     @Override
@@ -155,7 +218,6 @@ public class TopUpMyWallet extends AppCompatActivity {
                     }
                 });
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }

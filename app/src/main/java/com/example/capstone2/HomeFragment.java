@@ -143,6 +143,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), TopUpMyWallet.class);
+                intent.putExtra("userId", userId);
                 startActivity(intent);
             }
         });
@@ -208,7 +209,7 @@ public class HomeFragment extends Fragment {
                                             String checkin = transaction.getFormattedCheckinTime();
                                             String checkout = transaction.getFormattedCheckoutTime();
 
-                                            dataActivities.add(new DataActivity(title, time, sign, money, location, checkin, checkout));
+                                            dataActivities.add(0, new DataActivity(title, time, sign, money, location, checkin, checkout));
                                         }
 
                                         // Tạo adapter mới với dữ liệu mới và thiết lập cho RecyclerView
@@ -272,5 +273,6 @@ public class HomeFragment extends Fragment {
             return ""; // hoặc return numberString; nếu bạn muốn trả về chuỗi không thay đổi
         }
     }
+
 
 }
