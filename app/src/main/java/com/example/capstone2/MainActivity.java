@@ -5,6 +5,8 @@ import static android.app.PendingIntent.getActivity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
@@ -48,8 +50,16 @@ public class MainActivity extends AppCompatActivity {
         mViewPager.setOffscreenPageLimit(3);
         mViewPager.setCurrentItem(0);
 
-        setEvent();
+        Intent intentReLoad = getIntent();
+        if (intentReLoad != null) {
+            String reload = intentReLoad.getStringExtra("load");
+            // Xử lý dữ liệu nhận được ở đây
+            if(reload != null) {
 
+            }
+        }
+
+        setEvent();
     }
 
     void setEvent() {

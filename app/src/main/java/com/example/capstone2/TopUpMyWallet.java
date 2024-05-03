@@ -52,6 +52,14 @@ public class TopUpMyWallet extends AppCompatActivity {
         StrictMode.setThreadPolicy(policy);
         ZaloPaySDK.init(553, Environment.SANDBOX);
 
+// Trong Activity
+        Intent intent = getIntent();
+        if (intent != null) {
+            String money = intent.getStringExtra("money");
+            // Xử lý dữ liệu nhận được ở đây
+            txt_soduvi.setText(formatCurrency(String.valueOf(money)));
+        }
+
         setEvent();
     }
 
@@ -142,6 +150,11 @@ public class TopUpMyWallet extends AppCompatActivity {
                     @Override
                     public void onPaymentSucceeded(final String transactionId, final String transToken, final String appTransID) {
                         Toast.makeText(TopUpMyWallet.this, "Thanh toán thành công", Toast.LENGTH_SHORT).show();
+                        // Chuyển hướng về MainActivity
+                        Intent intent = new Intent(TopUpMyWallet.this, MainActivity.class);
+                        startActivity(intent);
+                        intent.putExtra("load", "load");
+                        finish();
                     }
 
                     @Override
@@ -184,5 +197,19 @@ public class TopUpMyWallet extends AppCompatActivity {
                 load.setVisibility(View.GONE);
             }
         }, 5000); // 5000 milliseconds = 5 giây
+    }
+    public static String formatCurrency(String numberString) {
+        try {
+            // Chuyển đổi chuỗi thành số nguyên
+            int number = Integer.parseInt(numberString);
+
+            // Sử dụng DecimalFormat để định dạng số và thêm ký tự tiền tệ
+            DecimalFormat decimalFormat = new DecimalFormat("#,###đ");
+            return decimalFormat.format(number);
+        } catch (NumberFormatException e) {
+            // Xử lý nếu chuỗi không phải là số
+            e.printStackTrace();
+            return ""; // hoặc return numberString; nếu bạn muốn trả về chuỗi không thay đổi
+        }
     }
 }

@@ -1,6 +1,9 @@
 package com.example.capstone2;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -113,6 +116,8 @@ public class HomeFragment extends Fragment {
             String userEmail = bundle.getString("user_email");
             // Gọi phương thức getUserByEmail() để lấy thông tin người dùng dựa trên email
             getUserByEmail(userEmail);
+
+
         }
 
         img_btn_scan.setOnClickListener(new View.OnClickListener() {
@@ -143,10 +148,12 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), TopUpMyWallet.class);
+                intent.putExtra("money", money); //
                 startActivity(intent);
             }
         });
         setEvent();
+
         return view;
     }
     Boolean check = true;
@@ -167,7 +174,7 @@ public class HomeFragment extends Fragment {
             }
         });
     }
-
+    String money = "";
     private void getUserByEmail(String email) {
         // Gọi phương thức getUserByEmail(email) từ ApiService
         ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
@@ -181,6 +188,7 @@ public class HomeFragment extends Fragment {
                     if (user != null) {
                         txt_name.setText(user.getFull_name());
                         // Gán giá trị của wallet vào TextView txt_wallet
+                        money = String.valueOf(user.getWallet());
                         String wallet = formatCurrency(String.valueOf(user.getWallet()));
                         txt_wallet.setText(wallet);
 
@@ -258,6 +266,7 @@ public class HomeFragment extends Fragment {
             }
         }
     }
+
     public static String formatCurrency(String numberString) {
         try {
             // Chuyển đổi chuỗi thành số nguyên
@@ -272,5 +281,17 @@ public class HomeFragment extends Fragment {
             return ""; // hoặc return numberString; nếu bạn muốn trả về chuỗi không thay đổi
         }
     }
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Thực hiện các hoạt động bạn muốn khi Fragment trở lại trạng thái hiển thị
+        // Lấy userEmail từ getArguments()
+        Bundle bundle = getArguments();
+        if (bundle != null && bundle.containsKey("user_email")) {
+            String userEmail = bundle.getString("user_email");
+            // Gọi phương thức getUserByEmail() để lấy thông tin người dùng dựa trên email
+            getUserByEmail(userEmail);
+            Log.d(TAG, "resume" + userId);
+        }
+    }
 }

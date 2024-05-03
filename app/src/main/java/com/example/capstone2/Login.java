@@ -3,6 +3,7 @@ package com.example.capstone2;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -38,6 +39,8 @@ public class Login extends AppCompatActivity {
 
         // Đăng ký sự kiện khi người dùng click vào nút đăng nhập bằng Google
         findViewById(R.id.btn_login_google).setOnClickListener(view -> signIn());
+
+        checkLoggedIn();
     }
 
     private void signIn() {
@@ -75,6 +78,8 @@ public class Login extends AppCompatActivity {
                             if (emails != null && !emails.isEmpty()) {
                                 if (emails.contains(userEmail)) {
                                     // Địa chỉ email hợp lệ, đăng nhập thành công
+
+                                    saveLoginSession(account.getId(), account.getEmail()); // Lưu thông tin phiên đăng nhập vào SharedPreferences
                                     Intent intent = new Intent(Login.this, MainActivity.class);
                                     Toast.makeText(Login.this, userEmail, Toast.LENGTH_SHORT).show();
                                     intent.putExtra("user_email", userEmail); //
@@ -113,6 +118,27 @@ public class Login extends AppCompatActivity {
             Log.e("GoogleSignIn", "signInResult:failed code=" + e.getMessage());
             Toast.makeText(this, "Đăng nhập không thành công !", Toast.LENGTH_SHORT).show();
             signOut(); // Đăng xuất người dùng
+        }
+    }
+
+    private void saveLoginSession(String userId, String email) {
+        SharedPreferences.Editor editor = getSharedPreferences("MyPrefs", MODE_PRIVATE).edit();
+        editor.putString("userId", userId);
+        editor.putString("email", email);
+        editor.apply();
+    }
+
+    private void checkLoggedIn() {
+        SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        String userId = prefs.getString("userId", null);
+        String email = prefs.getString("email", null);
+        if (userId != null) {
+            // Đã đăng nhập trước đó, chuyển hướng đến màn hình chính
+            // Ví dụ:
+            Intent intent = new Intent(Login.this, MainActivity.class);
+            startActivity(intent);
+            intent.putExtra("user_email", email); //
+            finish(); // Kết thúc Activity hiện tại để ngăn người dùng quay lại màn hình đăng nhập
         }
     }
     @Override
