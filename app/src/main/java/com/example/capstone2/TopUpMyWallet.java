@@ -182,9 +182,9 @@ public class TopUpMyWallet extends AppCompatActivity {
                                     Toast.makeText(TopUpMyWallet.this, "Nạp tiền thành công", Toast.LENGTH_SHORT).show();
                                     startActivity(new Intent(TopUpMyWallet.this, MainActivity.class)
                                             .setAction(MainActivity.ACTION_RELOAD_HOME_FRAGMENT));
-                                    Intent intent = new Intent(TopUpMyWallet.this, MainActivity.class);
-                                    intent.putExtra("fragmentToLoad", "HomeFragment"); // Gửi dữ liệu để chỉ định fragment cần tải
-                                    startActivity(intent);
+//                                    Intent intent = new Intent(TopUpMyWallet.this, MainActivity.class);
+//                                    intent.putExtra("fragmentToLoad", "HomeFragment"); // Gửi dữ liệu để chỉ định fragment cần tải
+//                                    startActivity(intent);
                                     finish();
                                 } else {
                                     // Xử lý khi API deposit thất bại
@@ -199,9 +199,9 @@ public class TopUpMyWallet extends AppCompatActivity {
                                 Toast.makeText(TopUpMyWallet.this, "Nạp tiền thành công ", Toast.LENGTH_SHORT).show();
                                 startActivity(new Intent(TopUpMyWallet.this, MainActivity.class)
                                         .setAction(MainActivity.ACTION_RELOAD_HOME_FRAGMENT));
-                                Intent intent = new Intent(TopUpMyWallet.this, MainActivity.class);
-                                intent.putExtra("fragmentToLoad", "HomeFragment"); // Gửi dữ liệu để chỉ định fragment cần tải
-                                startActivity(intent);
+//                                Intent intent = new Intent(TopUpMyWallet.this, MainActivity.class);
+//                                intent.putExtra("fragmentToLoad", "HomeFragment"); // Gửi dữ liệu để chỉ định fragment cần tải
+//                                startActivity(intent);
                                 finish();
                             }
                         });

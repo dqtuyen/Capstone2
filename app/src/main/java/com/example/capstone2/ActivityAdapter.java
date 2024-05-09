@@ -39,6 +39,7 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
     public ActivityAdapter(Context context, ArrayList<DataActivity> dataActivities) {
         this.context = context;
         this.dataActivities = dataActivities;
+        setHasStableIds(false);
     }
     @NonNull
     @Override
@@ -57,11 +58,13 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
         if(dataActivity.getSign().toString().contains("+")) {
             holder.txt_money.setTextColor(Color.parseColor("#00A81B"));
             holder.img_view.setImageResource(R.drawable.ic_money);
-            holder.txt_location.setText("");
+            holder.txt_location.setText(dataActivity.getTime());
             holder.txt_checkin.setText("");
             holder.txt_checkout.setText("");
         }
         if(dataActivity.getSign().toString().contains("-")) {
+            holder.txt_money.setTextColor(Color.parseColor("#C6393B"));
+            holder.img_view.setImageResource(R.drawable.ic_moto);
             holder.txt_location.setText(dataActivity.getLocation());
             holder.txt_checkin.setText(dataActivity.getCheckin());
             holder.txt_checkout.setText(dataActivity.getCheckout());
