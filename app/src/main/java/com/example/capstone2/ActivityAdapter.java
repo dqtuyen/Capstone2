@@ -25,7 +25,7 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
             super(itemView);
             txt_money = itemView.findViewById(R.id.txt_wallet);
             txt_title = itemView.findViewById(R.id.txt_title);
-            txt_date = itemView.findViewById(R.id.txt_date);
+            //txt_date = itemView.findViewById(R.id.txt_date);
             img_view = itemView.findViewById(R.id.img_view);
             txt_location = itemView.findViewById(R.id.txt_location);
             txt_checkin = itemView.findViewById(R.id.txt_checkin);
@@ -51,7 +51,7 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
     public void onBindViewHolder(@NonNull ActivityAdapter.ViewHolder holder, int position) {
         DataActivity dataActivity = dataActivities.get(position);
         holder.txt_title.setText(dataActivity.getTitle());
-        holder.txt_date.setText(dataActivity.getTime());
+        //holder.txt_date.setText(dataActivity.getTime());
         String getMoney = dataActivity.getMoney();
         holder.txt_money.setText((dataActivity.getSign() + formatCurrency(getMoney)));
         if(dataActivity.getSign().toString().contains("+")) {

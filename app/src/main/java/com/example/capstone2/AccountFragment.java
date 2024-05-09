@@ -1,10 +1,14 @@
 package com.example.capstone2;
 
 import static android.content.ContentValues.TAG;
+import static android.content.Context.MODE_PRIVATE;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -13,6 +17,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
 import java.util.List;
 
@@ -66,7 +74,7 @@ public class AccountFragment extends Fragment {
         }
     }
 
-    Button btn_information;
+    Button btn_information, btn_logout;
     TextView txt_name, txt_name2, txt_phone, txt_email, txt_address;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -79,6 +87,7 @@ public class AccountFragment extends Fragment {
         txt_phone = view.findViewById(R.id.txt_phone);
         txt_email = view.findViewById(R.id.txt_email);
         txt_address = view.findViewById(R.id.txt_address);
+        btn_logout = view.findViewById(R.id.btn_logout);
 
         // Lấy userEmail từ getArguments()
         Bundle bundle = getArguments();
@@ -98,6 +107,12 @@ public class AccountFragment extends Fragment {
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), EditInformatinon.class);
                 startActivity(intent);
+            }
+        });
+        btn_logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                logout();
             }
         });
     }
@@ -131,5 +146,31 @@ public class AccountFragment extends Fragment {
                 Log.e(TAG, "API call failed", t);
             }
         });
+    }
+    private GoogleSignInClient mGoogleSignInClient;
+    private void logout() {
+        // Xóa dữ liệu phiên đăng nhập từ SharedPreferences
+        SharedPreferences.Editor editor = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE).edit();
+        editor.remove("userId");
+        editor.remove("email");
+        editor.apply();
+        startActivity(new Intent(requireContext(), Login.class));
+        requireActivity().finish();
+
+        // Đăng xuất khỏi Google Sign-In
+        // Đăng xuất khỏi Google Sign-In
+//        mGoogleSignInClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
+//            @Override
+//            public void onComplete(@NonNull Task<Void> task) {
+//                if (task.isSuccessful()) {
+//                    // Thực hiện các hành động sau khi đăng xuất thành công
+//                    // Ví dụ: chuyển hướng người dùng đến màn hình đăng nhập
+//                    startActivity(new Intent(requireContext(), Login.class));
+//                    requireActivity().finish(); // Kết thúc Activity hiện tại để ngăn người dùng quay lại màn hình chính
+//                } else {
+//                    // Xử lý khi đăng xuất không thành công (nếu cần)
+//                }
+//            }
+//        });
     }
 }

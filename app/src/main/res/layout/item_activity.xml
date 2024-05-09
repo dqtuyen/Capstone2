@@ -29,12 +29,7 @@
                 android:textSize="@dimen/text_size_h3"
                 android:text="Thanh toán gửi xe bằng QR" />
 
-            <TextView
-                android:id="@+id/txt_date"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/text_size_h4"
-                android:text="19:30, 03 thg 03 2024" />
+
 
             <TextView
                 android:id="@+id/txt_location"
