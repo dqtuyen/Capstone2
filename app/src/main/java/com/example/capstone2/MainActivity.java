@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
         fragmentList = new ArrayList<>();
         // Truyền userEmail cho HomeFragment khi tạo instance của nó
-        fragmentList.add(HomeFragment.newInstance(userEmail2));
+        fragmentList.add(HomeFragment.newInstance(userEmail));
         fragmentList.add(QRFragment.newInstance(userEmail));
         fragmentList.add(AccountFragment.newInstance(userEmail));
 
@@ -134,9 +134,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         // Gọi phương thức load dữ liệu trong Fragment khi MainActivity resume
-        if (homeFragment != null) {
-            homeFragment.loadDataFromDatabase();
-        }
+//        if (homeFragment != null) {
+//            homeFragment.loadDataFromDatabase();
+//        }
     }
 
 }

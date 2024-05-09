@@ -96,7 +96,7 @@ public class HomeFragment extends Fragment {
     RecyclerView recyclerView;
     ArrayList<DataActivity> dataActivities = new ArrayList<>();
     ActivityAdapter adapter;
-    String userEmail;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -113,7 +113,7 @@ public class HomeFragment extends Fragment {
         // Lấy userEmail từ getArguments()
         Bundle bundle = getArguments();
         if (bundle != null && bundle.containsKey("user_email")) {
-            userEmail = bundle.getString("user_email");
+            String userEmail = bundle.getString("user_email");
             // Gọi phương thức getUserByEmail() để lấy thông tin người dùng dựa trên email
             getUserByEmail(userEmail);
 
@@ -148,8 +148,9 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), TopUpMyWallet.class);
-                intent.putExtra("money", money); //
+                intent.putExtra("userId", userId);
                 startActivity(intent);
+
             }
         });
         setEvent();
@@ -175,82 +176,7 @@ public class HomeFragment extends Fragment {
         });
     }
     void loadDataFromDatabase() {
-        // Gọi phương thức getUserByEmail(email) từ ApiService
-        ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
-        Call<User> call = apiService.getUserByEmail(userEmail);
-        call.enqueue(new Callback<User>() {
-
-            @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                if (response.isSuccessful()) {
-                    User user = response.body();
-                    if (user != null) {
-                        txt_name.setText(user.getFull_name());
-                        // Gán giá trị của wallet vào TextView txt_wallet
-                        money = String.valueOf(user.getWallet());
-                        String wallet = formatCurrency(String.valueOf(user.getWallet()));
-                        txt_wallet.setText(wallet);
-
-                        userId = user.getUser_id();
-                        Log.d(TAG, "User ID: " + userId);
-                        // Gọi API để lấy lịch sử giao dịch dựa trên user ID
-                        ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
-                        Call<List<Transaction>> transactionCall = apiService.getTransactionHistory(userId);
-                        transactionCall.enqueue(new Callback<List<Transaction>>() {
-                            @Override
-                            public void onResponse(Call<List<Transaction>> call, Response<List<Transaction>> response) {
-                                if (response.isSuccessful()) {
-                                    List<Transaction> transactions = response.body();
-                                    if (transactions != null && !transactions.isEmpty()) {
-                                        // Xóa dữ liệu cũ trong dataActivities
-                                        dataActivities.clear();
-
-                                        // Duyệt qua từng giao dịch và thêm vào dataActivities
-                                        for (Transaction transaction : transactions) {
-                                            String title = transaction.getTransactionTypeString();
-                                            String time = transaction.getFormattedTranTime();
-                                            String sign = transaction.getSign();
-                                            String money = String.valueOf(transaction.getAmount());
-                                            String location = transaction.getLocation();
-                                            String checkin = transaction.getFormattedCheckinTime();
-                                            String checkout = transaction.getFormattedCheckoutTime();
-
-                                            dataActivities.add(new DataActivity(title, time, sign, money, location, checkin, checkout));
-                                        }
-
-                                        // Tạo adapter mới với dữ liệu mới và thiết lập cho RecyclerView
-                                        adapter = new ActivityAdapter(getContext(), dataActivities);
-                                        recyclerView.setAdapter(adapter);
-                                    } else {
-                                        Log.d(TAG, "No transaction history found for user ID: " + userId);
-                                    }
-                                } else {
-                                    Log.e(TAG, "Failed to get transaction history");
-                                }
-                            }
-                            @Override
-                            public void onFailure(Call<List<Transaction>> call, Throwable t) {
-                                Log.e(TAG, "API call failed", t);
-                            }
-                        });
-
-                        // Gán fullname vào txt_name
-                        txt_name.setText(user.getFull_name());
-                        // Log fullName lên console
-                        Log.d(TAG, "FullName: " + user.getFull_name());
-                    } else {
-                        Log.e(TAG, "User object is null");
-                    }
-                } else {
-                    Log.e(TAG, "API call failed");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
-                Log.e(TAG, "API call failed", t);
-            }
-        });
+        Toast.makeText(getContext(), "Reload", Toast.LENGTH_SHORT).show();
     }
     String money = "";
     private void getUserByEmail(String email) {

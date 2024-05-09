@@ -40,7 +40,7 @@ public class Login extends AppCompatActivity {
         // Đăng ký sự kiện khi người dùng click vào nút đăng nhập bằng Google
         findViewById(R.id.btn_login_google).setOnClickListener(view -> signIn());
 
-        checkLoggedIn();
+        //checkLoggedIn();
     }
 
     private void signIn() {
