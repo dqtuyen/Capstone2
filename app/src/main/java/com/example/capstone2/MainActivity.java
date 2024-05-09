@@ -11,6 +11,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -24,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     List<Fragment> fragmentList;
     private ViewPager mViewPager;
     private BottomNavigationView mBottomNavigationView;
-
+    private HomeFragment homeFragment;
     public static final String ACTION_RELOAD_HOME_FRAGMENT = "com.example.capstone2.RELOAD_HOME_FRAGMENT";
 
     @Override
@@ -39,6 +40,13 @@ public class MainActivity extends AppCompatActivity {
         // Lấy userEmail từ Intent
         Intent intent = getIntent();
         String userEmail = intent.getStringExtra("user_email");
+        //Log.d("TestGetString: ", userEmail);
+
+
+        // Lấy userEmail từ Intent
+        Intent intent2 = getIntent();
+        String userEmail2 = intent2.getStringExtra("email");
+        //Log.d("TestGetString: ", userEmail2);
 
         mViewPager = findViewById(R.id.view_pager);
         mBottomNavigationView = findViewById(R.id.bottom_navigation);
@@ -122,6 +130,13 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.recyclerView, new HomeFragment())
                 .commit();
+    }
+    protected void onResume() {
+        super.onResume();
+        // Gọi phương thức load dữ liệu trong Fragment khi MainActivity resume
+//        if (homeFragment != null) {
+//            homeFragment.loadDataFromDatabase();
+//        }
     }
 
 }

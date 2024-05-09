@@ -1,6 +1,9 @@
 package com.example.capstone2;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -113,6 +116,8 @@ public class HomeFragment extends Fragment {
             String userEmail = bundle.getString("user_email");
             // Gọi phương thức getUserByEmail() để lấy thông tin người dùng dựa trên email
             getUserByEmail(userEmail);
+
+
         }
 
         img_btn_scan.setOnClickListener(new View.OnClickListener() {
@@ -145,9 +150,11 @@ public class HomeFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), TopUpMyWallet.class);
                 intent.putExtra("userId", userId);
                 startActivity(intent);
+
             }
         });
         setEvent();
+
         return view;
     }
     Boolean check = true;
@@ -168,7 +175,10 @@ public class HomeFragment extends Fragment {
             }
         });
     }
-
+    void loadDataFromDatabase() {
+        Toast.makeText(getContext(), "Reload", Toast.LENGTH_SHORT).show();
+    }
+    String money = "";
     private void getUserByEmail(String email) {
         // Gọi phương thức getUserByEmail(email) từ ApiService
         ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
@@ -182,6 +192,7 @@ public class HomeFragment extends Fragment {
                     if (user != null) {
                         txt_name.setText(user.getFull_name());
                         // Gán giá trị của wallet vào TextView txt_wallet
+                        money = String.valueOf(user.getWallet());
                         String wallet = formatCurrency(String.valueOf(user.getWallet()));
                         txt_wallet.setText(wallet);
 
@@ -209,7 +220,7 @@ public class HomeFragment extends Fragment {
                                             String checkin = transaction.getFormattedCheckinTime();
                                             String checkout = transaction.getFormattedCheckoutTime();
 
-                                            dataActivities.add(0, new DataActivity(title, time, sign, money, location, checkin, checkout));
+                                            dataActivities.add(new DataActivity(title, time, sign, money, location, checkin, checkout));
                                         }
 
                                         // Tạo adapter mới với dữ liệu mới và thiết lập cho RecyclerView
@@ -259,6 +270,7 @@ public class HomeFragment extends Fragment {
             }
         }
     }
+
     public static String formatCurrency(String numberString) {
         try {
             // Chuyển đổi chuỗi thành số nguyên
@@ -273,6 +285,10 @@ public class HomeFragment extends Fragment {
             return ""; // hoặc return numberString; nếu bạn muốn trả về chuỗi không thay đổi
         }
     }
-
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Load dữ liệu từ database mỗi khi Fragment hiển thị
+        loadDataFromDatabase();
+    }
 }

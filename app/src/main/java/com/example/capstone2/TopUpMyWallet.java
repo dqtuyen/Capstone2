@@ -58,6 +58,7 @@ public class TopUpMyWallet extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             userId = extras.getInt("userId");
+            Log.e("TopUpMyWallet", String.valueOf(userId));
         } else {
             // Nếu không có userId được chuyển, ghi thông báo lên terminal
             Log.e("TopUpMyWallet", "Không có userId được chuyển từ HomeFragment");
