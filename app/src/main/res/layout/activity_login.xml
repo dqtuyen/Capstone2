@@ -15,7 +15,7 @@
         android:text="Quên mật khẩu?"
         android:textColor="@color/gray"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edt_password" />
+        app:layout_constraintTop_toBottomOf="@+id/edt_name" />
 
 
 
@@ -33,7 +33,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/edt_password"
+        android:id="@+id/edt_name"
         android:layout_width="match_parent"
         android:layout_height="@dimen/size_box"
         android:layout_marginHorizontal="@dimen/margin_mid"
@@ -46,10 +46,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edt_account" />
+        app:layout_constraintTop_toBottomOf="@+id/edt_sdt" />
 
     <EditText
-        android:id="@+id/edt_account"
+        android:id="@+id/edt_sdt"
         android:layout_width="match_parent"
         android:layout_height="@dimen/size_box"
         android:layout_centerHorizontal="true"
@@ -76,7 +76,7 @@
         app:backgroundTint="@null"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edt_password" />
+        app:layout_constraintTop_toBottomOf="@+id/edt_name" />
 
     <TextView
         android:id="@+id/textView4"
@@ -90,17 +90,36 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_login" />
 
-    <TextView
-        android:id="@+id/textView5"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        android:gravity="center"
-        android:text="Don’t have an account? Register Now"
-        android:textColor="@color/gray"
+        android:orientation="horizontal"
+        android:padding="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_login_google">
+
+        <TextView
+            android:id="@+id/txt_"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Bạn chưa có tài khoản? "
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/txt_DangKy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Đăng Ký"
+            android:textColor="#03A9F4"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
 
     <ImageButton
         android:id="@+id/btn_login_google"

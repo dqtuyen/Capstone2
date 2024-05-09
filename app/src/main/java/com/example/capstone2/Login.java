@@ -18,6 +18,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import android.view.View;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -41,6 +43,17 @@ public class Login extends AppCompatActivity {
         findViewById(R.id.btn_login_google).setOnClickListener(view -> signIn());
 
         //checkLoggedIn();
+
+        TextView registerNowTextView = findViewById(R.id.txt_DangKy);
+        registerNowTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Bắt đầu activity Register khi TextView được nhấn
+                Intent intent = new Intent(Login.this, Register.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
     private void signIn() {
