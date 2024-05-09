@@ -177,6 +177,7 @@ public class QRFragment extends Fragment {
         }
     }
     HashMap<String, String> myHashMap = new HashMap<>();
+    String uid = "";
     String name_dob = "";
     private void getUserByEmail(String email) {
         // Gọi phương thức getUserByEmail(email) từ ApiService
@@ -190,9 +191,10 @@ public class QRFragment extends Fragment {
                     if (user != null) {
                         txt_name.setText(user.getFull_name());
                         txt_dob.setText(formatDateOfBirthView(user.getDate_of_birth()));
+                        uid = String.valueOf(user.getUser_id());
                         name_dob = user.getFull_name() + formatDateOfBirth(user.getDate_of_birth());
                         startCountdown();
-                        Log.d("test", "Tên và ngày sinh" + name_dob);
+                        Log.d("test", "uid:" + uid);
                     } else {
                         Log.e(TAG, "User object is null");
                     }
@@ -215,7 +217,10 @@ public class QRFragment extends Fragment {
                 Date now = new Date();
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
                 String formattedDateTime = formatter.format(now);
-                String createKEY = name_dob + formattedDateTime;
+                MD5Encoder md5Encoder = new MD5Encoder();
+
+                String token = md5Encoder.encodeToMD5(name_dob + formattedDateTime);
+                String createKEY = uid + token;
                 createNewQR(createKEY);
                 Log.d("Test", "đã tạo KEY" + createKEY);
 

@@ -80,6 +80,7 @@ public class Login extends AppCompatActivity {
                                     // Địa chỉ email hợp lệ, đăng nhập thành công
 
                                     saveLoginSession(account.getId(), account.getEmail()); // Lưu thông tin phiên đăng nhập vào SharedPreferences
+                                    Log.d("Test: ", account.getId() + "acc: " + account.getEmail());
                                     Intent intent = new Intent(Login.this, MainActivity.class);
                                     Toast.makeText(Login.this, userEmail, Toast.LENGTH_SHORT).show();
                                     intent.putExtra("user_email", userEmail); //
@@ -137,7 +138,8 @@ public class Login extends AppCompatActivity {
             // Ví dụ:
             Intent intent = new Intent(Login.this, MainActivity.class);
             startActivity(intent);
-            intent.putExtra("user_email", email); //
+            intent.putExtra("email", email); //
+            Log.d("Test: ", email) ;
             finish(); // Kết thúc Activity hiện tại để ngăn người dùng quay lại màn hình đăng nhập
         }
     }
