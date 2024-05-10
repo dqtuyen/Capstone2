@@ -89,6 +89,7 @@ public class QRFragment extends Fragment {
     private CountDownTimer countDownTimer;
     private Runnable countdownRunnable;
     private Handler handler;
+    MD5Encoder md5Encoder = new MD5Encoder();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -103,12 +104,18 @@ public class QRFragment extends Fragment {
         // Lấy dữ liệu từ SharedPreferences
         String createKEY;
         if (!sharedPreferences.getAll().isEmpty()) {
-            createKEY = sharedPreferences.getString("createKEY", "");
+            String uid = sharedPreferences.getString("uid", "");
+            String token = sharedPreferences.getString("token", "");
+            long currentTimeMillis = System.currentTimeMillis();
+            String md5Enc = md5Encoder.encodeToMD5(token + currentTimeMillis);
+            createKEY = uid + ":" + currentTimeMillis + ":" + md5Enc ;
+            Log.d("Test", "Mã tạo từ shared: " + createKEY);
+
         } else {
             createKEY = "gregagaefaefaef";
+            Log.d("Test", "aaaaaaaa");
         }
-
-        Log.d("test", "Lấy key từ share: " + createKEY);
+        Log.d("Test", "Mã tạo từ shared: " + createKEY);
         createNewQR(createKEY);
         imageView.setImageBitmap(mergedBitmap);
 
@@ -221,7 +228,7 @@ public class QRFragment extends Fragment {
 //                SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
 //                String formattedDateTime = formatter.format(now);
 
-                MD5Encoder md5Encoder = new MD5Encoder();
+
 
                 long currentTimeMillis = System.currentTimeMillis();
                 System.out.println("Thời gian hiện tại (mili giây): " + currentTimeMillis);
@@ -244,7 +251,8 @@ public class QRFragment extends Fragment {
                 SharedPreferences sharedPreferences = getActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
                 // Sử dụng Editor để chỉnh sửa SharedPreferences
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("createKEY", createKEY);
+                editor.putString("uid", uid);
+                editor.putString("token", token);
                 // Lưu các thay đổi
                 editor.apply();
 

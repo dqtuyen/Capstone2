@@ -255,7 +255,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        Toast.makeText(getContext(), "Reload", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getContext(), "Reload", Toast.LENGTH_SHORT).show();
     }
     String money = "";
     private void getUserByEmail(String email) {
