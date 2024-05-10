@@ -14,9 +14,10 @@ public class User {
     private String email;
     private int gender;
     private double wallet;
+    private String token;
 
     // Constructor
-    public User(int user_id, String full_name, String user_code, int role, Date date_of_birth, String phone_number, String address, String email, int gender, double wallet) {
+    public User(int user_id, String full_name, String user_code, int role, Date date_of_birth, String phone_number, String address, String email, int gender, double wallet, String token) {
         this.user_id = user_id;
         this.full_name = full_name;
         this.user_code = user_code;
@@ -27,6 +28,7 @@ public class User {
         this.email = email;
         this.gender = gender;
         this.wallet = wallet;
+        this.token = token;
     }
 
     // Getter và Setter cho user_id
@@ -59,6 +61,13 @@ public class User {
     // Getter và Setter cho role
     public int getRole() {
         return role;
+    }
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public void setRole(int role) {

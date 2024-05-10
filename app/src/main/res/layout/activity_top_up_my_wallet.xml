@@ -7,16 +7,25 @@
     tools:context=".TopUpMyWallet">
 
 
+  <ImageView
+      android:id="@+id/img_btn_back"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_margin="@dimen/margin_mid"
+      android:src="@drawable/ic_back"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
+
   <TextView
       android:id="@+id/textView10"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginLeft="@dimen/margin_mid"
-      android:layout_marginTop="@dimen/margin_mid"
+      android:layout_marginStart="20dp"
+      android:layout_marginTop="25dp"
       android:text="Nạp tiền vào ví"
       android:textSize="@dimen/text_size_h2"
       android:textStyle="bold"
-      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintStart_toEndOf="@+id/img_btn_back"
       app:layout_constraintTop_toTopOf="parent" />
 
   <LinearLayout
@@ -24,6 +33,7 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:orientation="vertical"
+      android:layout_marginTop="10dp"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/textView10">
@@ -60,9 +70,9 @@
           app:layout_constraintTop_toTopOf="parent" />
 
       <ImageView
-          android:id="@+id/imageView"
-          android:layout_width="30dp"
-          android:layout_height="30dp"
+          android:id="@+id/img_eye"
+          android:layout_width="25dp"
+          android:layout_height="25dp"
           android:layout_marginStart="4dp"
           android:src="@drawable/ic_eye"
           app:layout_constraintBottom_toBottomOf="parent"

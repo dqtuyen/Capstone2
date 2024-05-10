@@ -108,8 +108,7 @@ public class QRFragment extends Fragment {
             createKEY = "gregagaefaefaef";
         }
 
-
-        Log.d("test", "Lấy key từ share" + createKEY);
+        Log.d("test", "Lấy key từ share: " + createKEY);
         createNewQR(createKEY);
         imageView.setImageBitmap(mergedBitmap);
 
@@ -179,6 +178,8 @@ public class QRFragment extends Fragment {
     HashMap<String, String> myHashMap = new HashMap<>();
     String uid = "";
     String name_dob = "";
+
+    String token = "";
     private void getUserByEmail(String email) {
         // Gọi phương thức getUserByEmail(email) từ ApiService
         ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
@@ -193,6 +194,8 @@ public class QRFragment extends Fragment {
                         txt_dob.setText(formatDateOfBirthView(user.getDate_of_birth()));
                         uid = String.valueOf(user.getUser_id());
                         name_dob = user.getFull_name() + formatDateOfBirth(user.getDate_of_birth());
+                        token = user.getToken();
+
                         startCountdown();
                         Log.d("test", "uid:" + uid);
                     } else {
@@ -214,15 +217,20 @@ public class QRFragment extends Fragment {
             @Override
             public void run() {
                 // Countdown finished, do something here if needed
-                Date now = new Date();
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
-                String formattedDateTime = formatter.format(now);
+//                Date now = new Date();
+//                SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
+//                String formattedDateTime = formatter.format(now);
+
                 MD5Encoder md5Encoder = new MD5Encoder();
 
-                String token = md5Encoder.encodeToMD5(name_dob + formattedDateTime);
-                String createKEY = uid + token;
+                long currentTimeMillis = System.currentTimeMillis();
+                System.out.println("Thời gian hiện tại (mili giây): " + currentTimeMillis);
+                Log.d("TestToken", token);
+
+                String md5Enc = md5Encoder.encodeToMD5(token + currentTimeMillis);
+                String createKEY = uid + ":" + currentTimeMillis + ":" + md5Enc ;
                 createNewQR(createKEY);
-                Log.d("Test", "đã tạo KEY" + createKEY);
+                Log.d("Test", "đã tạo KEY: " + createKEY);
 
                 //////////////////////////////ĐẨY LÊN DATABASE//////////////////
 

@@ -134,9 +134,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         // Gọi phương thức load dữ liệu trong Fragment khi MainActivity resume
-//        if (homeFragment != null) {
-//            homeFragment.loadDataFromDatabase();
-//        }
+        if (homeFragment != null) {
+            homeFragment.loadDataFromDatabase();
+        }
     }
 
 }

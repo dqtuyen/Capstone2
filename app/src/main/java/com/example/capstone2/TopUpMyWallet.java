@@ -8,10 +8,12 @@ import android.os.Handler;
 import android.os.StrictMode;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,10 +48,13 @@ public class TopUpMyWallet extends AppCompatActivity {
     private DecimalFormat decimalFormat;
     private  int userId;
 
+    ImageView img_btn_back, img_eye;
+    String soduvi;
     Calendar calendar = Calendar.getInstance();
     private Date tranTime = calendar.getTime();
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
     String formattedTranTime = sdf.format(tranTime);
+    Boolean check = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +63,7 @@ public class TopUpMyWallet extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             userId = extras.getInt("userId");
+            soduvi = extras.getString("money");
             Log.e("TopUpMyWallet", String.valueOf(userId));
         } else {
             // Nếu không có userId được chuyển, ghi thông báo lên terminal
@@ -69,6 +75,8 @@ public class TopUpMyWallet extends AppCompatActivity {
         btn_100  = findViewById(R.id.btn_100);
         btn_200  = findViewById(R.id.btn_200);
         btn_naptien  = findViewById(R.id.btn_naptien);
+        img_btn_back = findViewById(R.id.img_btn_back);
+        img_eye = findViewById(R.id.img_eye);
         load = findViewById(R.id.load);
         StrictMode.ThreadPolicy policy = new
                 StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -76,6 +84,8 @@ public class TopUpMyWallet extends AppCompatActivity {
         ZaloPaySDK.init(553, Environment.SANDBOX);
 
         setEvent();
+
+        txt_soduvi.setText(soduvi);
     }
 
     void setEvent() {
@@ -86,6 +96,12 @@ public class TopUpMyWallet extends AppCompatActivity {
         decimalFormat.setDecimalFormatSymbols(symbols);
 
         // Thêm một TextWatcher cho EditText
+        img_btn_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         edt_money.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -146,6 +162,21 @@ public class TopUpMyWallet extends AppCompatActivity {
                 load5s();
                 String amount = btn_200.getText().toString();
                 requestZalo(removeCurrencyFormat(amount));
+            }
+        });
+        img_eye.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (check) {
+                    img_eye.setImageResource(R.drawable.ic_eye_hide);
+                    txt_soduvi.setTransformationMethod(new PasswordTransformationMethod());
+                    check = false;
+                } else {
+                    img_eye.setImageResource(R.drawable.ic_eye);
+                    txt_soduvi.setTransformationMethod(null);
+                    check = true;
+                }
+
             }
         });
     }
